@@ -19,19 +19,19 @@ const options = {
   disableDefaultUI: true,
   zoomControl: true,
 };
-const center = {
+const center = {//coordenadas de montevideo
   lat: -34.901112,
   lng: -56.164532,
 };
 
 async function fetchMonks() {
-    const response = await fetch("");
+    const response = await fetch("http://localhost:8080/api/v1/todas");
     const {monks} = await response.json();
     return monks;
 }
 
 async function createMonks(newMonk) {
-    const response = await fetch("", {
+    const response = await fetch("http://localhost:8080/api/v1/agregar", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({monk: newMonk}),
@@ -42,8 +42,7 @@ async function createMonks(newMonk) {
 
 export default function App() {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   });
   const {data: monks, error} = useQuery("monks", fetchMonks);
   const [mutate] = useMutation(createMonks, {
@@ -66,6 +65,11 @@ export default function App() {
     mapRef.current = map;
   }, []);
 
+  const panTo = React.useCallback(({ lat, lng }) => {
+    mapRef.current.panTo({ lat, lng });
+    mapRef.current.setZoom(14);
+  }, []);
+
   if (loadError) return <span>Load Error</span>;
   if(error) return <span>Query Error</span>;  
   if (!isLoaded) return <span>...Loading...</span>;
@@ -74,10 +78,12 @@ export default function App() {
     <div>
       <h1>
         FoodMonks{" "}
-        <span role="img" aria-label="tent">
-          ⛺️
+        <span role="img" aria-label="mosque">
+          🕌 
         </span>
       </h1>
+
+      <locate panTo={panTo}/>
 
       <GoogleMap
         id="map"
@@ -96,7 +102,7 @@ export default function App() {
               setSelected(monk);
             }}
             icon={{
-              url: `/bear.svg`,
+              url: `./src/steaming-bowl.svg`,
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(15, 15),
               scaledSize: new window.google.maps.Size(30, 30),
@@ -113,8 +119,8 @@ export default function App() {
           >
             <div>
               <h2>
-                <span role="img" aria-label="bear">
-                  🐻
+                <span role="img" aria-label="steaming-bowl">
+                🍜
                 </span>{" "}
                 Alert
               </h2>
@@ -124,5 +130,26 @@ export default function App() {
         ) : null}
       </GoogleMap>
     </div>
+  );
+}
+
+function Locate({ panTo }) {
+  return (
+    <button
+      className="locate"
+      onClick={() => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            panTo({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          },
+          () => null
+        );
+      }}
+    >
+      <img src="./src/compass.svg" alt="compass" />
+    </button>
   );
 }
