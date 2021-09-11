@@ -8,6 +8,8 @@ import {
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 
+import * as clave from "./clave"
+
 import mapStyles from "./mapStyles";
 
 const mapContainerStyle = {
@@ -42,7 +44,7 @@ async function createMonks(newMonk) {
 
 export default function App() {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: clave.clave
   });
   const {data: monks, error} = useQuery("monks", fetchMonks);
   const [mutate] = useMutation(createMonks, {
@@ -83,7 +85,7 @@ export default function App() {
         </span>
       </h1>
 
-      <locate panTo={panTo}/>
+      <Locate panTo={panTo}/>
 
       <GoogleMap
         id="map"
@@ -124,7 +126,7 @@ export default function App() {
                 </span>{" "}
                 Alert
               </h2>
-              <p>Spotted {formatRelative(selected.time, new Date())}</p>
+              <p>Food Munks {formatRelative(selected.time, new Date())}</p>
             </div>
           </InfoWindow>
         ) : null}
