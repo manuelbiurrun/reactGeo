@@ -12,6 +12,10 @@ import * as clave from "./clave"
 
 import mapStyles from "./mapStyles";
 
+import logo from "./logo.png";
+
+import bowl from "./foodMonks3.jpg"
+
 const mapContainerStyle = {
   height: "100vh",
   width: "100vw",
@@ -79,10 +83,7 @@ export default function App() {
   return (
     <div>
       <h1>
-        FoodMonks{" "}
-        <span role="img" aria-label="mosque">
-          🕌 
-        </span>
+          <img src={logo} alt="logo" width="200px" />
       </h1>
 
       <Locate panTo={panTo}/>
@@ -96,7 +97,7 @@ export default function App() {
         onClick={onMapClick}
         onLoad={onMapLoad}
       >
-        {monks.map((monk) => (
+        {monks != null ? monks.map((monk) => (
           <Marker
             key={`${monk.lat}-${monk.lng}`}
             position={{ lat: monk.lat, lng: monk.lng }}
@@ -104,13 +105,13 @@ export default function App() {
               setSelected(monk);
             }}
             icon={{
-              url: `./src/steaming-bowl.svg`,
+              url: {bowl},
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(15, 15),
               scaledSize: new window.google.maps.Size(30, 30),
             }}
           />
-        ))}
+        )): null}
 
         {selected ? (
           <InfoWindow
@@ -151,7 +152,9 @@ function Locate({ panTo }) {
         );
       }}
     >
-      <img src="./src/compass.svg" alt="compass" />
+    <span id="brujula" role="img" aria-label="mosque">
+    🧭
+    </span>  
     </button>
   );
 }
