@@ -29,4 +29,9 @@ public class Coordenada {
     private Long Id;
     private Float latitud;
     private Float longitud;
+
+    public Coordenada(Float latitud, float longitud) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+    }
 }

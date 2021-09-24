@@ -29,9 +29,17 @@ public class coordenadasAPI {
         return new ResponseEntity<>(coordenadas, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/todasMobile")
+    public ResponseEntity<List<Coordenada>> getAllCoordenadasMobile(@RequestBody String Lat, @RequestBody String Lng) {
+        List coordenadas = coordenadasRepo.findAll();
+        //falta filtrar las coordenadas dependiendo de la longitud y la latitud del cliente
+        return new ResponseEntity<>(coordenadas, HttpStatus.OK);
+    }
+
     @PostMapping(path = "/agregar")
     public ResponseEntity<Coordenada> agregarCoordenadas(@RequestBody Coordenada coordenada) {
-        coordenadasRepo.save(coordenada);
-        return new ResponseEntity<>(coordenada, HttpStatus.CREATED);
+        Coordenada coo = new Coordenada(coordenada.getLatitud(), coordenada.getLongitud());
+        coordenadasRepo.save(coo);
+        return new ResponseEntity<>(coo, HttpStatus.CREATED);
     }
 }

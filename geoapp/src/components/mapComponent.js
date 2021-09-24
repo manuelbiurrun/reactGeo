@@ -47,9 +47,7 @@ async function createMonks(newMonk) {
 }
 
 export default function App() {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: clave.clave
-  });
+  const { isLoaded, loadError } = useLoadScript({ googleMapsApiKey: clave.clave });
   const {data: monks, error} = useQuery("monks", fetchMonks);
   const [mutate] = useMutation(createMonks, {
       onSuccess: (newMonk) => {
@@ -97,6 +95,7 @@ export default function App() {
         onClick={onMapClick}
         onLoad={onMapLoad}
       >
+       
         {monks != null ? monks.map((monk) => (
           <Marker
             key={`${monk.lat}-${monk.lng}`}
