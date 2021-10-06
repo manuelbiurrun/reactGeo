@@ -27,10 +27,10 @@ public class Coordenada {
             updatable = false
     )
     private Long Id;
-    private Float latitud;
-    private Float longitud;
+    private Double latitud;
+    private Double longitud;
 
-    public Coordenada(Float latitud, float longitud) {
+    public Coordenada(Double latitud, Double longitud) {
         this.latitud = latitud;
         this.longitud = longitud;
     }
